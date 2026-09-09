@@ -42,9 +42,13 @@
   }
   .hero video{
     position:absolute;
-    inset:0;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
     width:100%;
     height:100%;
+    max-width:100%;
+    max-height:100%;
     object-fit:contain;
     object-position:center center;
     background:var(--parchment);
@@ -79,6 +83,15 @@
     letter-spacing:0.22em;
     cursor:pointer;
     padding:8px 2px;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), color .3s ease, letter-spacing .3s ease;
+  }
+  .menu-toggle:hover{
+    color:var(--red);
+    letter-spacing:0.28em;
+    transform:translateY(-1px);
+  }
+  .menu-toggle:active{
+    transform:scale(0.94);
   }
   .menu-toggle .bars{
     display:flex;
@@ -91,9 +104,10 @@
     height:1.5px;
     width:100%;
     background:var(--ink);
-    transition:transform .35s ease, opacity .25s ease, width .35s ease;
+    transition:transform .35s ease, opacity .25s ease, width .35s ease, background-color .3s ease;
   }
   .menu-toggle .bars span:nth-child(2){width:70%;}
+  .menu-toggle:hover .bars span{ background:var(--red); width:100%; }
   body.menu-open .menu-toggle .bars span:nth-child(1){transform:translateY(5.5px) rotate(45deg); width:100%;}
   body.menu-open .menu-toggle .bars span:nth-child(2){opacity:0;}
   body.menu-open .menu-toggle .bars span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg); width:100%;}
@@ -108,6 +122,7 @@
     border:none;
     cursor:pointer;
     font-family:'Jost',sans-serif;
+    transition: color .3s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
   }
   .contact-link::after{
     content:"";
@@ -119,7 +134,9 @@
     transform-origin:right;
     transition:transform .4s ease;
   }
-  .contact-link:hover::after{transform:scaleX(1); transform-origin:left;}
+  .contact-link:hover{ color:var(--red); transform:translateY(-1px); }
+  .contact-link:hover::after{transform:scaleX(1); transform-origin:left; background:var(--red);}
+  .contact-link:active{ transform:scale(0.94); }
 
   .hero-spacer{ flex:1; }
 
@@ -143,6 +160,8 @@
     white-space:nowrap;
     position:relative;
     padding-bottom:3px;
+    display:inline-block;
+    transition: color .3s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
   }
   .bottom-nav a::after{
     content:"";
@@ -154,7 +173,9 @@
     transform-origin:left;
     transition:transform .35s ease;
   }
+  .bottom-nav a:hover{ color:var(--red); transform:translateY(-2px); }
   .bottom-nav a:hover::after{transform:scaleX(1);}
+  .bottom-nav a:active{ transform:translateY(-2px) scale(0.95); }
 
   /* ---------- NAV TOOLTIP BALLOON ---------- */
   .nav-tip{
@@ -257,8 +278,20 @@
   }
   .overlay-nav li{
     border-top:1px solid var(--line);
+    opacity:0;
+    transform:translateY(16px);
   }
   .overlay-nav li:last-child{border-bottom:1px solid var(--line);}
+  body.menu-open .overlay-nav li{
+    animation: navItemIn .55s cubic-bezier(.19,1,.22,1) forwards;
+  }
+  body.menu-open .overlay-nav li:nth-child(1){ animation-delay:.10s; }
+  body.menu-open .overlay-nav li:nth-child(2){ animation-delay:.17s; }
+  body.menu-open .overlay-nav li:nth-child(3){ animation-delay:.24s; }
+  body.menu-open .overlay-nav li:nth-child(4){ animation-delay:.31s; }
+  @keyframes navItemIn{
+    to{ opacity:1; transform:translateY(0); }
+  }
   .overlay-nav a{
     display:flex;
     align-items:baseline;
@@ -269,7 +302,7 @@
     font-size: clamp(28px, 5.6vw, 52px);
     letter-spacing:0.01em;
     color:var(--ink);
-    transition: color .3s ease, gap .3s ease;
+    transition: color .3s ease, gap .3s ease, transform .2s ease;
   }
   .overlay-nav a .idx{
     font-family:'Jost',sans-serif;
@@ -277,8 +310,11 @@
     letter-spacing:0.05em;
     color:var(--red);
     min-width:24px;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1);
   }
   .overlay-nav a:hover{ color:var(--red); gap:26px; }
+  .overlay-nav a:hover .idx{ transform:scale(1.25); }
+  .overlay-nav a:active{ transform:scale(0.98); }
 
   .overlay-footer{
     display:flex;
@@ -306,6 +342,7 @@
   .overlay-footer .col a{
     position:relative;
     width:fit-content;
+    transition: color .3s ease, transform .2s ease;
   }
   .overlay-footer .col a::after{
     content:"";
@@ -317,7 +354,9 @@
     transform-origin:left;
     transition:transform .3s ease;
   }
+  .overlay-footer .col a:hover{ color:var(--ink); transform:translateX(2px); }
   .overlay-footer .col a:hover::after{transform:scaleX(1);}
+  .overlay-footer .col a:active{ transform:translateX(2px) scale(0.96); }
   .map-link{
     display:inline-flex;
     align-items:center;
@@ -329,7 +368,8 @@
     font-size:11.5px;
   }
   .map-link::after{ background:var(--red) !important; }
-  .map-link svg{ width:12px; height:12px; flex:none; }
+  .map-link svg{ width:12px; height:12px; flex:none; transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+  .map-link:hover svg{ transform:translate(3px,-2px); }
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 860px){
@@ -345,12 +385,23 @@
   }
 
   @media (prefers-reduced-motion: reduce){
+    .menu-toggle,
     .menu-toggle .bars span,
+    .contact-link,
     .contact-link::after,
+    .bottom-nav a,
     .bottom-nav a::after,
     .nav-tip,
     .overlay-menu,
-    .overlay-nav a{ transition:none !important; }
+    .overlay-nav a,
+    .overlay-nav a .idx,
+    .overlay-footer .col a,
+    .map-link svg{ transition:none !important; }
+    .overlay-nav li{
+      animation:none !important;
+      opacity:1 !important;
+      transform:none !important;
+    }
   }
 
   a:focus-visible, button:focus-visible{
@@ -463,7 +514,35 @@
 
     /* ---- vídeo: toca uma vez e trava no último frame ao terminar ---- */
     var video = document.getElementById('bgVideo');
+    var heroSection = document.querySelector('.hero');
     video.loop = false;
+
+    /* Calcula manualmente o tamanho "contain" em pixels.
+       Isso corrige o corte/zoom do vídeo em navegadores e webviews
+       (ex.: navegador interno do WhatsApp/Instagram) que não respeitam
+       corretamente object-fit em <video>, ignorando-o ou aplicando "cover". */
+    function fitVideo(){
+      if(!video.videoWidth || !video.videoHeight || !heroSection) return;
+      var cw = heroSection.clientWidth;
+      var ch = heroSection.clientHeight;
+      if(!cw || !ch) return;
+      var videoRatio = video.videoWidth / video.videoHeight;
+      var containerRatio = cw / ch;
+      if(videoRatio > containerRatio){
+        video.style.width = '100%';
+        video.style.height = 'auto';
+      }else{
+        video.style.width = 'auto';
+        video.style.height = '100%';
+      }
+    }
+    video.addEventListener('loadedmetadata', fitVideo);
+    window.addEventListener('resize', fitVideo);
+    window.addEventListener('orientationchange', function(){
+      setTimeout(fitVideo, 60);
+    });
+    fitVideo();
+
     video.addEventListener('ended', function(){
       try{
         video.currentTime = Math.max(0, video.duration - 0.03);
