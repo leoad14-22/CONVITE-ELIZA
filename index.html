@@ -156,6 +156,53 @@
   }
   .bottom-nav a:hover::after{transform:scaleX(1);}
 
+  /* ---------- NAV TOOLTIP BALLOON ---------- */
+  .nav-tip{
+    position:absolute;
+    left:50%;
+    bottom: calc(100% + 14px);
+    transform: translate(-50%, 6px);
+    background: var(--parchment);
+    color: var(--ink);
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size:15px;
+    line-height:1.35;
+    letter-spacing:0.01em;
+    white-space:normal;
+    width: max-content;
+    max-width: 240px;
+    text-align:center;
+    padding: 10px 14px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .28s ease, transform .28s ease;
+    z-index:30;
+  }
+  .nav-tip::after{
+    content:"";
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translateX(-50%);
+    width:0; height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-top:7px solid var(--parchment);
+  }
+  .bottom-nav a:hover .nav-tip,
+  .bottom-nav a:focus-visible .nav-tip{
+    opacity:1;
+    transform: translate(-50%, 0);
+  }
+  @media (hover: none){
+    .nav-tip{ display:none; }
+  }
+
   /* ---------- FULLSCREEN OVERLAY MENU ---------- */
   .overlay-menu{
     position:fixed;
@@ -292,7 +339,6 @@
   @media (max-width: 620px){
     .bottom-nav{ padding: 16px 18px; }
     .bottom-nav a{ font-size:10.5px; letter-spacing:0.14em; }
-    .bottom-nav a:nth-child(5){ display:none; }
   }
   @media (max-width: 480px){
     .bottom-nav{ display:none; }
@@ -302,6 +348,7 @@
     .menu-toggle .bars span,
     .contact-link::after,
     .bottom-nav a::after,
+    .nav-tip,
     .overlay-menu,
     .overlay-nav a{ transition:none !important; }
   }
@@ -333,12 +380,10 @@
   <div class="hero-spacer"></div>
 
   <nav class="bottom-nav" aria-label="Navegação principal">
-    <a href="#inicio">INÍCIO</a>
-    <a href="#eliza">ELIZA</a>
-    <a href="#local">DATA &amp; LOCAL</a>
-    <a href="#presentes">PRESENTES</a>
-    <a href="#confirmar">CONFIRMAR</a>
-    <a href="#contato">CONTATO</a>
+    <a href="#inicio">INÍCIO<span class="nav-tip">Bem-vindos ao convite do aniversário da Eliza!</span></a>
+    <a href="#eliza">ELIZA<span class="nav-tip">Eliza está fazendo 1 aninho, nascida em 14 de setembro</span></a>
+    <a href="#local">DATA &amp; LOCAL<span class="nav-tip">12 de setembro, a partir das 15h45, na casa da Bisa Isbela</span></a>
+    <a href="#contato">CONTATO<span class="nav-tip">Fale com a gente por telefone ou e-mail</span></a>
   </nav>
 </section>
 
@@ -357,9 +402,7 @@
     <li><a href="#inicio" data-idx="01"><span class="idx">01</span>Início</a></li>
     <li><a href="#eliza" data-idx="02"><span class="idx">02</span>Eliza</a></li>
     <li><a href="#local" data-idx="03"><span class="idx">03</span>Data &amp; Local</a></li>
-    <li><a href="#presentes" data-idx="04"><span class="idx">04</span>Presentes</a></li>
-    <li><a href="#confirmar" data-idx="05"><span class="idx">05</span>Confirmar Presença</a></li>
-    <li><a href="#contato" data-idx="06"><span class="idx">06</span>Contato</a></li>
+    <li><a href="#contato" data-idx="04"><span class="idx">04</span>Contato</a></li>
   </ul>
 
   <div class="overlay-footer" id="contato">
