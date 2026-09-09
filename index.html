@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aniversário da Eliza — 1 aninho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Parisienne&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#efe1c5;
+    --parchment-deep:#e6d2ab;
+    --ink:#2b1c10;
+    --ink-soft:#4a3320;
+    --saddle:#7a4a26;
+    --red:#a8382b;
+    --green:#5f7a4e;
+    --line: rgba(43,28,16,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:'Jost', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- HERO / VIDEO BACKGROUND ---------- */
+  .hero{
+    position:relative;
+    width:100%;
+    height:100svh;
+    min-height:560px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    background:var(--parchment);
+  }
+  .hero video{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center center;
+    background:var(--parchment);
+  }
+  .top-fade{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:150px;
+    background:linear-gradient(180deg, rgba(239,225,197,0.92) 0%, rgba(239,225,197,0) 100%);
+    pointer-events:none;
+    z-index:5;
+  }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:relative;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: clamp(18px,3vw,28px) clamp(20px,4vw,56px) 0;
+  }
+  .menu-toggle{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:none;
+    border:none;
+    color:var(--ink);
+    font-family:'Jost',sans-serif;
+    font-size:13px;
+    letter-spacing:0.22em;
+    cursor:pointer;
+    padding:8px 2px;
+  }
+  .menu-toggle .bars{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    width:20px;
+  }
+  .menu-toggle .bars span{
+    display:block;
+    height:1.5px;
+    width:100%;
+    background:var(--ink);
+    transition:transform .35s ease, opacity .25s ease, width .35s ease;
+  }
+  .menu-toggle .bars span:nth-child(2){width:70%;}
+  body.menu-open .menu-toggle .bars span:nth-child(1){transform:translateY(5.5px) rotate(45deg); width:100%;}
+  body.menu-open .menu-toggle .bars span:nth-child(2){opacity:0;}
+  body.menu-open .menu-toggle .bars span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg); width:100%;}
+
+  .contact-link{
+    font-size:12.5px;
+    letter-spacing:0.22em;
+    color:var(--ink);
+    position:relative;
+    padding-bottom:4px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-family:'Jost',sans-serif;
+  }
+  .contact-link::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:1px;
+    background:var(--ink);
+    transform:scaleX(0);
+    transform-origin:right;
+    transition:transform .4s ease;
+  }
+  .contact-link:hover::after{transform:scaleX(1); transform-origin:left;}
+
+  .hero-spacer{ flex:1; }
+
+  /* ---------- BOTTOM NAV (desktop) ---------- */
+  .bottom-nav{
+    position:relative;
+    z-index:20;
+    background:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 22px clamp(20px,4vw,56px);
+    gap: 12px;
+  }
+  .bottom-nav a{
+    color:var(--parchment);
+    font-family:'Jost',sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:0.2em;
+    white-space:nowrap;
+    position:relative;
+    padding-bottom:3px;
+  }
+  .bottom-nav a::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:1.5px;
+    background:var(--red);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .35s ease;
+  }
+  .bottom-nav a:hover::after{transform:scaleX(1);}
+
+  /* ---------- FULLSCREEN OVERLAY MENU ---------- */
+  .overlay-menu{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:var(--parchment);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding: clamp(18px,3vw,28px) clamp(20px,4vw,56px) clamp(28px,4vw,48px);
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path .6s cubic-bezier(.77,0,.18,1);
+    overflow-y:auto;
+  }
+  body.menu-open .overlay-menu{
+    clip-path: inset(0 0 0% 0);
+  }
+  .overlay-top{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+  }
+  .brandmark{
+    display:flex;
+    flex-direction:column;
+    line-height:1;
+  }
+  .brandmark .name{
+    font-family:'Parisienne', cursive;
+    font-size:clamp(30px,4vw,42px);
+    color:var(--red);
+  }
+  .brandmark .sub{
+    font-family:'Jost',sans-serif;
+    font-size:11px;
+    letter-spacing:0.28em;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+  .overlay-top .close-label{
+    font-size:13px;
+    letter-spacing:0.22em;
+    color:var(--ink);
+  }
+  .overlay-nav{
+    list-style:none;
+    margin:0; padding:0;
+    display:flex;
+    flex-direction:column;
+    gap: clamp(4px, 1vh, 10px);
+  }
+  .overlay-nav li{
+    border-top:1px solid var(--line);
+  }
+  .overlay-nav li:last-child{border-bottom:1px solid var(--line);}
+  .overlay-nav a{
+    display:flex;
+    align-items:baseline;
+    gap:18px;
+    padding: clamp(9px,1.6vh,16px) 2px;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size: clamp(28px, 5.6vw, 52px);
+    letter-spacing:0.01em;
+    color:var(--ink);
+    transition: color .3s ease, gap .3s ease;
+  }
+  .overlay-nav a .idx{
+    font-family:'Jost',sans-serif;
+    font-size:12px;
+    letter-spacing:0.05em;
+    color:var(--red);
+    min-width:24px;
+  }
+  .overlay-nav a:hover{ color:var(--red); gap:26px; }
+
+  .overlay-footer{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap: 18px 32px;
+    padding-top: 18px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    color: var(--ink-soft);
+  }
+  .overlay-footer .col{
+    display:flex; flex-direction:column; gap:6px;
+    min-width:190px;
+  }
+  .overlay-footer .col strong{
+    color:var(--ink);
+    font-weight:600;
+    letter-spacing:0.18em;
+    font-size:11px;
+    margin-bottom:2px;
+    font-family:'Jost',sans-serif;
+  }
+  .overlay-footer .col a{
+    position:relative;
+    width:fit-content;
+  }
+  .overlay-footer .col a::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    height:1px;
+    background:var(--ink-soft);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .3s ease;
+  }
+  .overlay-footer .col a:hover::after{transform:scaleX(1);}
+  .map-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:4px;
+    color:var(--red) !important;
+    font-weight:600;
+    letter-spacing:0.08em;
+    font-size:11.5px;
+  }
+  .map-link::after{ background:var(--red) !important; }
+  .map-link svg{ width:12px; height:12px; flex:none; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .bottom-nav a:nth-child(2),
+    .bottom-nav a:nth-child(4){ display:none; }
+  }
+  @media (max-width: 620px){
+    .bottom-nav{ padding: 16px 18px; }
+    .bottom-nav a{ font-size:10.5px; letter-spacing:0.14em; }
+    .bottom-nav a:nth-child(5){ display:none; }
+  }
+  @media (max-width: 480px){
+    .bottom-nav{ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .menu-toggle .bars span,
+    .contact-link::after,
+    .bottom-nav a::after,
+    .overlay-menu,
+    .overlay-nav a{ transition:none !important; }
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:3px;
+  }
+
+  body.menu-open{ overflow:hidden; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <video id="bgVideo" autoplay muted playsinline preload="auto" aria-label="Convite animado do aniversário de 1 ano da Eliza, tema country">
+<source src="eliza.mp4"
+    </video>
+  <div class="top-fade"></div>
+
+  <div class="topbar">
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="overlayMenu">
+      <span class="bars"><span></span><span></span><span></span></span>
+      <span class="menu-label">MENU</span>
+    </button>
+    <button class="contact-link" id="contatoTop">CONTATO</button>
+  </div>
+
+  <div class="hero-spacer"></div>
+
+  <nav class="bottom-nav" aria-label="Navegação principal">
+    <a href="#inicio">INÍCIO</a>
+    <a href="#eliza">ELIZA</a>
+    <a href="#local">DATA &amp; LOCAL</a>
+    <a href="#presentes">PRESENTES</a>
+    <a href="#confirmar">CONFIRMAR</a>
+    <a href="#contato">CONTATO</a>
+  </nav>
+</section>
+
+<div class="overlay-menu" id="overlayMenu" role="dialog" aria-modal="true" aria-label="Menu de navegação do convite">
+  <div class="overlay-top">
+    <span class="brandmark">
+      <span class="name">Eliza</span>
+      <span class="sub">1 ANINHO · TEMA COUNTRY</span>
+    </span>
+    <button class="menu-toggle" id="menuClose" aria-label="Fechar menu" style="padding-bottom:6px;">
+      <span class="close-label">FECHAR</span>
+    </button>
+  </div>
+
+  <ul class="overlay-nav">
+    <li><a href="#inicio" data-idx="01"><span class="idx">01</span>Início</a></li>
+    <li><a href="#eliza" data-idx="02"><span class="idx">02</span>Eliza</a></li>
+    <li><a href="#local" data-idx="03"><span class="idx">03</span>Data &amp; Local</a></li>
+    <li><a href="#presentes" data-idx="04"><span class="idx">04</span>Presentes</a></li>
+    <li><a href="#confirmar" data-idx="05"><span class="idx">05</span>Confirmar Presença</a></li>
+    <li><a href="#contato" data-idx="06"><span class="idx">06</span>Contato</a></li>
+  </ul>
+
+  <div class="overlay-footer" id="contato">
+    <div class="col">
+      <strong>DATA &amp; HORÁRIO</strong>
+      <span>12 de setembro</span>
+      <span>A partir das 15h45</span>
+    </div>
+    <div class="col">
+      <strong>LOCAL</strong>
+      <span>Casa da Bisa Isbela</span>
+      <span>R. Paulo Alves Silva, 200</span>
+      <span>Jardim Paulistano, Franca - SP</span>
+      <span>14402-432, Brasil</span>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&amp;query=R.%20Paulo%20Alves%20Silva%2C%20200%20-%20Jardim%20Paulistano%2C%20Franca%20-%20SP%2C%2014402-432%2C%20Brasil" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Ver no mapa
+      </a>
+    </div>
+    <div class="col">
+      <strong>CONTATO</strong>
+      <a href="tel:+5516992955432">(16) 99295-5432</a>
+      <a href="mailto:leonardodionizio14@gmail.com">leonardodionizio14@gmail.com</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var body = document.body;
+    var toggle = document.getElementById('menuToggle');
+    var closeBtn = document.getElementById('menuClose');
+    var contatoTop = document.getElementById('contatoTop');
+    var overlay = document.getElementById('overlayMenu');
+
+    function openMenu(){
+      body.classList.add('menu-open');
+      toggle.setAttribute('aria-expanded','true');
+      var firstLink = overlay.querySelector('a');
+      if(firstLink) firstLink.focus({preventScroll:true});
+    }
+    function closeMenu(){
+      body.classList.remove('menu-open');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.focus({preventScroll:true});
+    }
+    toggle.addEventListener('click', function(){
+      body.classList.contains('menu-open') ? closeMenu() : openMenu();
+    });
+    contatoTop.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    overlay.querySelectorAll('.overlay-nav a').forEach(function(a){
+      a.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && body.classList.contains('menu-open')) closeMenu();
+    });
+
+    /* ---- vídeo: toca uma vez e trava no último frame ao terminar ---- */
+    var video = document.getElementById('bgVideo');
+    video.loop = false;
+    video.addEventListener('ended', function(){
+      try{
+        video.currentTime = Math.max(0, video.duration - 0.03);
+      }catch(err){}
+      video.pause();
+    });
+    var playPromise = video.play();
+    if(playPromise !== undefined){
+      playPromise.catch(function(){ /* aguarda interação do usuário se necessário */ });
+    }
+  })();
+</script>
+
+</body>
+</html>
